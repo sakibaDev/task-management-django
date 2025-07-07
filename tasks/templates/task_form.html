@@ -1,32 +1,22 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-
-    <link rel="stylesheet" href="{% static "css/output.css" %}">
+    <title>Create Task</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <div>
-        {% if message %}
-          <p>{{message}}</p>
-        {% endif %}
-    </div>
-    <form action="" method="POST">
+    <h2>Create Task</h2>
 
-       <div>
-                <label for="{{ form.title.id_for_label }}" class="block text-gray-700 font-semibold">Title</label>
-                
-        </div>
+    {% if message %}
+        <p style="color: green;">{{ message }}</p>
+    {% endif %}
+
+    <form method="post">
         {% csrf_token %}
-
-        {{form.as_p}}
-                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full">
-                    Submit
-                </button>
-        
+        {{ form.as_p }}
+        <button type="submit">Create</button>
     </form>
 </body>
-</html> 
+</html>
