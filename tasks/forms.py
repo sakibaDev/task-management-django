@@ -1,6 +1,6 @@
 from django import forms
 
-from tasks.models import Task
+from tasks.models import Task,TaskDetail
 
 #for form
 class TaskForm(forms.Form):
@@ -17,16 +17,40 @@ class TaskForm(forms.Form):
             (emp.id, emp.name ) for emp in employee
         ]
 
-#for ModelForm
-class TaskModelForm(forms.ModelForm):
+# tasks/forms.py
+
+from django import forms
+from .models import Task, TaskDetail
+
+# Mixin defined here directly
+class StyledFormMixin:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+            widget = field.widget
+            base_class = 'block w-full px-4 py-2 mt-1 border rounded-md shadow-sm focus:ring focus:ring-blue-300 focus:outline-none'
+
+            if isinstance(widget, (forms.CheckboxInput, forms.CheckboxSelectMultiple)):
+                base_class = 'mr-2 accent-blue-500'
+
+            existing_classes = widget.attrs.get('class', '')
+            widget.attrs['class'] = f'{existing_classes} {base_class}'.strip()
+
+# Now use it in your forms
+class TaskModelForm(StyledFormMixin, forms.ModelForm):
     class Meta:
         model = Task
-        fields = ['title', 'assigned_to', 'description']  # title comes first
+        fields = ['title', 'assigned_to', 'description']
         widgets = {
-            'title': forms.TextInput(attrs={
-                'class': 'border border-gray-300 p-2 rounded w-full',
-                'placeholder': 'Enter task title'
-            }),
+            'title': forms.TextInput(attrs={'placeholder': 'Enter task title'}),
             'description': forms.Textarea(attrs={'rows': 3}),
             'assigned_to': forms.CheckboxSelectMultiple(),
         }
+
+class TaskDetailModelForm(StyledFormMixin, forms.ModelForm):
+    class Meta:
+        model = TaskDetail
+        fields = ['priority']
+
+

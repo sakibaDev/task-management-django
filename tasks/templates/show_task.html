@@ -1,13 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
 </head>
 <body>
-    <div>
-        {{tasks}}
-    </div>
+
+
+
+    """1.Show the tasks which are assigned to a specific employee"""
+    {% comment %} <h2>Tasks for {{ employee.name }}</h2>
+
+    {% for task in tasks %}
+        <p>
+            <strong>{{ task.title }}</strong><br>
+            {{ task.status }}
+        </p>
+    {% empty %}
+        <p>No tasks found.</p>
+    {% endfor %} {% endcomment %}
 </body>
 </html>
